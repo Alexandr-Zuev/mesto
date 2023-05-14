@@ -1,0 +1,5 @@
+.footer {
+  margin: 66px auto 60px auto;
+  display: flex;
+  min-width: 880px;
+}

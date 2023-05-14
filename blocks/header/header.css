@@ -1,0 +1,9 @@
+.header {
+  width: 90%;
+  min-height: 74px;
+  max-width: 880px;
+  margin: 45px auto 40px auto;
+  display: flex;
+  border-bottom: 1px solid #545454;
+  box-sizing: border-box;
+}
