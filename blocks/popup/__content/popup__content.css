@@ -1,13 +1,6 @@
 .popup__content {
-    display: flex;
-    flex-direction: column;
-    align-self: center;
-    position: relative;
-    margin: 155px auto auto auto;
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  position: relative;
 }
-
-@media screen and (max-width: 740px) {
-    .popup__content {
-        margin: 87px auto auto auto;    
-    }
-  }

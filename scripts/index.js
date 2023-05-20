@@ -7,6 +7,9 @@ const nameInputTitleEl = document.querySelector('#name-input-title');
 const nameInputSubTitleEl = document.querySelector('#name-input-subtitle');
 const editFormEl = document.querySelector('#edit-form');
 
+nameInputTitleEl.value = profileTitleEl.textContent;
+nameInputSubTitleEl.value = profileSubTitleEl.textContent;
+
 openPopupButtonEl.addEventListener('click', function () {
   openPopup(editPopupEl);
 });
@@ -23,18 +26,14 @@ function closePopup(popupEl) {
   popupEl.classList.remove('popup_is-opened');
 }
 
-nameInputTitleEl.value = profileTitleEl.textContent;
-nameInputSubTitleEl.value = profileSubTitleEl.textContent;
-
 editFormEl.addEventListener('submit', function (event) {
   event.preventDefault();
-
   profileTitleEl.textContent = nameInputTitleEl.value;
   profileSubTitleEl.textContent = nameInputSubTitleEl.value;
-
   closePopup(editPopupEl);
 });
 
+/* функционал, связанный с лайками
 const buttonsLike = document.querySelectorAll('.like-button');
 let isImageChanged = false;
 buttonsLike.forEach(function (button) {
@@ -48,3 +47,4 @@ buttonsLike.forEach(function (button) {
     }
   });
 });
+*/

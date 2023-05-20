@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mesto</title>
     <link rel="stylesheet" href="./pages/index.css" />
-    <script src="./index.js" defer></script>
+    <script src="./scripts/index.js" defer></script>
   </head>
   <body class="root">
     <div class="page">
@@ -18,64 +18,69 @@
           <img src="./images/avatar.png" alt="аватар" class="profile__avatar" />
           <div class="profile__info">
             <div class="profile__info-title">
-              <h2 class="profile__title">Жак-Ив Кусто</h2>
-              <button id="open-popup-button" class="open-button"></button>
+              <h1 class="profile__title">Жак-Ив Кусто</h1>
+              <button id="open-popup-button" class="open-button" type="button"></button>
             </div>
             <p class="profile__subtitle">Исследователь океана</p>
           </div>
-          <button class="add-button"></button>
+          <button class="add-button" type="button"></button>
         </section>
         <section class="elements">
-          <div class="element">
+          <article class="element">
             <img src="./images/karachaevsk.png" alt="Карачаевск" class="element__img" />
             <div class="element__group">
               <h2 class="element__text">Карачаевск</h2>
-              <button class="like-button"></button>
+              <button class="like-button" type="button"></button>
             </div>
-          </div>
-          <div class="element">
+          </article>
+          <article class="element">
             <img src="./images/elbrus.png" alt="Гора Эльбрус" class="element__img" />
             <div class="element__group">
               <h2 class="element__text">Гора Эльбрус</h2>
-              <button class="like-button"></button>
+              <button class="like-button" type="button"></button>
             </div>
-          </div>
-          <div class="element">
+          </article>
+          <article class="element">
             <img src="./images/dombay.png" alt="Домбай" class="element__img" />
             <div class="element__group">
               <h2 class="element__text">Домбай</h2>
-              <button class="like-button"></button>
+              <button class="like-button" type="button"></button>
             </div>
-          </div>
-          <div class="element">
+          </article>
+          <article class="element">
             <img src="./images/elbrus.png" alt="Гора Эльбрус" class="element__img" />
             <div class="element__group">
               <h2 class="element__text">Гора Эльбрус</h2>
-              <button class="like-button"></button>
+              <button class="like-button" type="button"></button>
             </div>
-          </div>
-          <div class="element">
+          </article>
+          <article class="element">
             <img src="./images/dombay.png" alt="Домбай" class="element__img" />
             <div class="element__group">
               <h2 class="element__text">Домбай</h2>
-              <button class="like-button"></button>
+              <button class="like-button" type="button"></button>
             </div>
-          </div>
-          <div class="element">
+          </article>
+          <article class="element">
             <img src="./images/karachaevsk.png" alt="Карачаево-Черкессия" class="element__img" />
             <div class="element__group">
               <h2 class="element__text">Карачаево-Черкессия</h2>
-              <button class="like-button"></button>
+              <button class="like-button" type="button"></button>
             </div>
-          </div>
+          </article>
         </section>
         <div id="popup" class="popup">
           <div class="popup__content">
-            <button id="close-popup-button" class="popup__close-button"></button>
-            <form id="edit-form" class="popup__form">
+            <button id="close-popup-button" class="popup__close-button" type="button"></button>
+            <form id="edit-form" class="popup__form" name="edit-form">
               <h2 class="popup__title">Редактировать профиль</h2>
-              <input id="name-input-title" type="text" class="input" />
-              <input id="name-input-subtitle" type="text" class="input" />
+              <input id="name-input-title" type="text" class="input" name="name-input-title" />
+              <input
+                id="name-input-subtitle"
+                type="text"
+                class="input"
+                name="name-input-subtitle"
+              />
               <button type="submit" class="popup__save-button">Сохранить</button>
             </form>
           </div>
