@@ -2,6 +2,8 @@
   background-color: #fff;
   display: flex;
   flex-direction: column;
-   border-radius: 10px;
+  border-radius: 10px;
   overflow: hidden;
+  min-width: 282px;
+  min-height: 362px;
 }
