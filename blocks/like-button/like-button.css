@@ -7,7 +7,7 @@
   border: none;
   width: 22px;
   height: 19px;
-  margin: 0 15px 0 auto;
+  margin: auto 15px auto auto;
   padding: 0;
   cursor: pointer;
   overflow: visible;
