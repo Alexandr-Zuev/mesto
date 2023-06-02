@@ -23,7 +23,7 @@
             </div>
             <p class="profile__subtitle">Исследователь океана</p>
           </div>
-          <button class="add-button" type="button"></button>
+          <button id="add-button" class="add-button" type="button"></button>
         </section>
         <section class="elements">
           <template id="template-element">
@@ -35,46 +35,35 @@
                 <button class="like-button" type="button"></button>
               </div>
             </article>
-          </template>
+          </template>               
         </section>
         <div id="popup-edit-profile" class="popup">
           <div class="popup__content">
-            <button
-              id="close-popup-profile-button"
-              class="popup__close-button"
-              type="button"
-            ></button>
+            <button id="close-popup-profile-button" class="popup__close-button" type="button"></button>
             <form id="edit-form" class="popup__form" name="edit-form">
               <h2 class="popup__title">Редактировать профиль</h2>
               <input id="name-input-title" type="text" class="input" name="name-input-title" />
-              <input
-                id="name-input-subtitle"
-                type="text"
-                class="input"
-                name="name-input-subtitle"
-              />
+              <input id="name-input-subtitle" type="text" class="input" name="name-input-subtitle" />
               <button type="submit" class="popup__save-button">Сохранить</button>
             </form>
           </div>
         </div>
         <div id="popup-add-element" class="popup">
           <div class="popup__content">
-            <button
-              id="close-popup-add-elements-button"
-              class="popup__close-button"
-              type="button"
-            ></button>
-            <form id="add-form" class="popup__form" name="edit-form">
+            <button id="close-popup-add-elements-button" class="popup__close-button" type="button"></button>
+            <form id="add-form" class="popup__form" name="add-form">
               <h2 class="popup__title">Новое место</h2>
-              <input id="name-input-title" type="text" class="input" name="name-input-title" />
-              <input
-                id="name-input-subtitle"
-                type="text"
-                class="input"
-                name="name-input-subtitle"
-              />
+              <input id="name-input-card" type="text" class="input" name="name-input-card" value="Название" />
+              <input id="name-input-link" type="url" class="input" name="name-input-link" value="Ссылка на картинку" />
               <button type="submit" class="popup__save-button">Создать</button>
             </form>
+          </div>
+        </div>
+        <div id="popupCard" class="popup">
+          <div class="popup__content">
+            <button id="close-popupCard-button" class="popup__close-button" type="button"></button>
+            <img src=" " alt="Картинка" class="popup__image" />
+            <p class="popup__title-image"></p>
           </div>
         </div>
       </main>
