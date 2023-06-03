@@ -12,6 +12,14 @@
   color: #000;
 }
 
+input::placeholder {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  color: #c4c4c4;
+}
+
 @media screen and (max-width: 740px) {
   .input {
     width: 238px;

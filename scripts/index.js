@@ -1,27 +1,28 @@
-const initialCards = [{
-  name: 'Архыз',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-},
-{
-  name: 'Челябинская область',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-},
-{
-  name: 'Иваново',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-},
-{
-  name: 'Камчатка',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-},
-{
-  name: 'Холмогорский район',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-},
-{
-  name: 'Байкал',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-}
+const initialCards = [
+  {
+    name: 'Архыз',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
+  },
+  {
+    name: 'Челябинская область',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
+  },
+  {
+    name: 'Иваново',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
+  },
+  {
+    name: 'Камчатка',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
+  },
+  {
+    name: 'Холмогорский район',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
+  },
+  {
+    name: 'Байкал',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
+  }
 ];
 // Попап "section profile"
 
@@ -35,28 +36,28 @@ const nameInputSubTitleEl = document.querySelector('#name-input-subtitle');
 const editFormEl = document.querySelector('#edit-form');
 
 function openPopup(popupEl) {
-popupEl.classList.add('popup_is-opened');
+  popupEl.classList.add('popup_is-opened');
 }
 
 function closePopup(popupEl) {
-popupEl.classList.remove('popup_is-opened');
+  popupEl.classList.remove('popup_is-opened');
 }
 
-openPopupProfileEl.addEventListener('click', function() {
-openPopup(editPopupEl);
-nameInputTitleEl.value = profileTitleEl.textContent;
-nameInputSubTitleEl.value = profileSubTitleEl.textContent;
+openPopupProfileEl.addEventListener('click', function () {
+  openPopup(editPopupEl);
+  nameInputTitleEl.value = profileTitleEl.textContent;
+  nameInputSubTitleEl.value = profileSubTitleEl.textContent;
 });
 
-closePopupProfileEl.addEventListener('click', function() {
-closePopup(editPopupEl);
+closePopupProfileEl.addEventListener('click', function () {
+  closePopup(editPopupEl);
 });
 
-editFormEl.addEventListener('submit', function(event) {
-event.preventDefault();
-closePopup(editPopupEl);
-profileTitleEl.textContent = nameInputTitleEl.value;
-profileSubTitleEl.textContent = nameInputSubTitleEl.value;
+editFormEl.addEventListener('submit', function (event) {
+  event.preventDefault();
+  closePopup(editPopupEl);
+  profileTitleEl.textContent = nameInputTitleEl.value;
+  profileSubTitleEl.textContent = nameInputSubTitleEl.value;
 });
 
 // Добавление  и удаление initialCards в elements
@@ -66,23 +67,22 @@ const templateContent = template.content;
 const elementItemEl = templateContent.querySelector('.element');
 const elementsEl = document.querySelector('.elements');
 
-
-initialCards.forEach(function(item) {
-const newElement = createElement(item);
-elementsEl.prepend(newElement);
+initialCards.forEach(function (item) {
+  const newElement = createElement(item);
+  elementsEl.prepend(newElement);
 });
 
 function createElement(initialCards) {
-const newElement = elementItemEl.cloneNode(true);
-const textCard = newElement.querySelector('.element__text');
-textCard.textContent = initialCards.name;
-const imageCard = newElement.querySelector('.element__img');
-imageCard.src = initialCards.link;
-const deleteButton = newElement.querySelector('.delete-button');
-deleteButton.addEventListener('click', function() {
-  elementsEl.removeChild(newElement);
-});
-return newElement;
+  const newElement = elementItemEl.cloneNode(true);
+  const textCard = newElement.querySelector('.element__text');
+  textCard.textContent = initialCards.name;
+  const imageCard = newElement.querySelector('.element__img');
+  imageCard.src = initialCards.link;
+  const deleteButton = newElement.querySelector('.delete-button');
+  deleteButton.addEventListener('click', function () {
+    elementsEl.removeChild(newElement);
+  });
+  return newElement;
 }
 
 // Попап "section elements"
@@ -95,74 +95,74 @@ const nameInputCardEl = document.querySelector('#name-input-card');
 const nameTnputLinkEl = document.querySelector('#name-input-link');
 console.log(nameTnputLinkEl.value);
 
-openPopupElementsEl.addEventListener('click', function() {
-openPopup(addPopupEl);
+openPopupElementsEl.addEventListener('click', function () {
+  openPopup(addPopupEl);
 });
 
-closePopupElementsEl.addEventListener('click', function() {
-closePopup(addPopupEl);
+closePopupElementsEl.addEventListener('click', function () {
+  closePopup(addPopupEl);
 });
 
-addFormEl.addEventListener('submit', function(event) {
-event.preventDefault();
-const newElement = createElementFromForm();
-elementsEl.prepend(newElement);
+addFormEl.addEventListener('submit', function (event) {
+  event.preventDefault();
+  const newElement = createElementFromForm();
+  elementsEl.prepend(newElement);
 });
 
 function createElementFromForm() {
-const newElement = elementItemEl.cloneNode(true);
-const textCard = newElement.querySelector('.element__text');
-textCard.textContent = nameInputCardEl.value;
-const imageCard = newElement.querySelector('.element__img');
-imageCard.src = nameTnputLinkEl.value;
-const deleteButton = newElement.querySelector('.delete-button');
+  const newElement = elementItemEl.cloneNode(true);
+  const textCard = newElement.querySelector('.element__text');
+  textCard.textContent = nameInputCardEl.value;
+  const imageCard = newElement.querySelector('.element__img');
+  imageCard.src = nameTnputLinkEl.value;
+  const deleteButton = newElement.querySelector('.delete-button');
 
-deleteButton.addEventListener('click', function() {
-  elementsEl.removeChild(newElement);
-});
+  deleteButton.addEventListener('click', function () {
+    elementsEl.removeChild(newElement);
+  });
 
-return newElement;
+  return newElement;
 }
 
 // Попап "element"
 
 const popupTriggerList = document.querySelectorAll('.element__img');
 const popupCard = document.querySelector('#popupCard');
-const popupCardImage = document.querySelector('.popup__image');
-const popupCardTitle = document.querySelector('.popup__title-image');
+const popupCardImage = document.querySelector('.popupCard__image');
+const popupCardTitle = document.querySelector('.popupCard__title-image');
 const popupCardCloseButton = document.querySelector('#close-popupCard-button');
 
-popupTriggerList.forEach((trigger) => {
-trigger.addEventListener('click', openPopupCard);
+popupTriggerList.forEach(trigger => {
+  trigger.addEventListener('click', openPopupCard);
 });
 
 popupCardCloseButton.addEventListener('click', closePopupCard);
 
 function openPopupCard(event) {
-const clickedCard = event.target.closest('.element');
-const clickedImage = event.target;
-const imageURL = clickedImage.getAttribute('src');
-const imageTiltle = clickedCard.querySelector('.element__text').textContent;
-popupCardImage.setAttribute('src', imageURL);
-popupCardTitle.textContent = imageTiltle;
-popupCard.style.display = 'flex';
+  const clickedCard = event.target.closest('.element');
+  const clickedImage = event.target;
+  const imageURL = clickedImage.getAttribute('src');
+  const imageTiltle = clickedCard.querySelector('.element__text').textContent;
+  popupCardImage.setAttribute('src', imageURL);
+  popupCardTitle.textContent = imageTiltle;
+  popupCard.classList.add('popup_is-opened');
 }
 
 function closePopupCard() {
-popupCard.style.display = 'none';
+  popupCard.classList.remove('popup_is-opened');
 }
 
 // button "like"
 const buttonsLike = document.querySelectorAll('.like-button');
 let isImageChanged = false;
-buttonsLike.forEach(function(button) {
-button.addEventListener('click', function() {
-  if (isImageChanged) {
+buttonsLike.forEach(function (button) {
+  button.addEventListener('click', function () {
+    if (isImageChanged) {
       button.style.backgroundImage = "url('../../images/likeButton.svg')";
       isImageChanged = false;
-  } else {
+    } else {
       button.style.backgroundImage = "url('../../images/likeButton_active.svg')";
       isImageChanged = true;
-  }
-});
+    }
+  });
 });
