@@ -124,7 +124,7 @@ function createElementFromForm() {
   return newElement;
 }
 
-// Попап "element"
+// Попап "popupCard"
 
 const popupTriggerList = document.querySelectorAll('.element__img');
 const popupCard = document.querySelector('#popupCard');
