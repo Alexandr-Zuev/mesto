@@ -27,13 +27,19 @@ const initialCards = [
 // Попап "section profile"
 
 const openPopupProfileEl = document.querySelector('#open-popup-profile-button');
-const closePopupProfileEl = document.querySelector('#close-popup-profile-button');
 const editPopupEl = document.querySelector('#popup-edit-profile');
 const profileTitleEl = document.querySelector('.profile__title');
 const profileSubTitleEl = document.querySelector('.profile__subtitle');
 const nameInputTitleEl = document.querySelector('#name-input-title');
 const nameInputSubTitleEl = document.querySelector('#name-input-subtitle');
 const editFormEl = document.querySelector('#edit-form');
+const closePopupButtonsEl = document.querySelectorAll('.popup__close-button');
+
+// Закрытие всех попапов по кнопке
+closePopupButtonsEl.forEach(button => {
+  const popup = button.closest('.popup');
+  button.addEventListener('click', () => closePopup(popup));
+});
 
 function openPopup(popupEl) {
   popupEl.classList.add('popup_is-opened');
@@ -47,10 +53,6 @@ openPopupProfileEl.addEventListener('click', function () {
   openPopup(editPopupEl);
   nameInputTitleEl.value = profileTitleEl.textContent;
   nameInputSubTitleEl.value = profileSubTitleEl.textContent;
-});
-
-closePopupProfileEl.addEventListener('click', function () {
-  closePopup(editPopupEl);
 });
 
 editFormEl.addEventListener('submit', function (event) {
@@ -75,94 +77,80 @@ initialCards.forEach(function (item) {
 function createElement(initialCards) {
   const newElement = elementItemEl.cloneNode(true);
   const textCard = newElement.querySelector('.element__text');
-  textCard.textContent = initialCards.name;
   const imageCard = newElement.querySelector('.element__img');
+  const popupCard = document.querySelector('#popupCard');
+  const popupImage = popupCard.querySelector('.popup__image');
+  const popupTitleImg = popupCard.querySelector('.popup__title-image');
+
+  textCard.textContent = initialCards.name;
   imageCard.src = initialCards.link;
+  imageCard.alt = initialCards.name;
+
   const deleteButton = newElement.querySelector('.delete-button');
   deleteButton.addEventListener('click', function () {
     elementsEl.removeChild(newElement);
   });
+
+  const likeButton = newElement.querySelector('.like-button');
+  likeButton.addEventListener('click', function () {
+    likeButton.classList.toggle('like-button_status-active');
+  });
+
+  imageCard.addEventListener('click', function () {
+    openPopup(popupCard);
+    popupImage.src = imageCard.src;
+    popupImage.alt = imageCard.alt;
+    popupTitleImg.textContent = textCard.textContent;
+  });
+
   return newElement;
 }
 
 // Попап "section elements"
-
-const openPopupElementsEl = document.querySelector('#add-button');
-const closePopupElementsEl = document.querySelector('#close-popup-add-elements-button');
+const addButtonEl = document.querySelector('#add-button');
 const addPopupEl = document.querySelector('#popup-add-element');
 const addFormEl = document.querySelector('#add-form');
 const nameInputCardEl = document.querySelector('#name-input-card');
-const nameTnputLinkEl = document.querySelector('#name-input-link');
-console.log(nameTnputLinkEl.value);
+const nameInputLinkEl = document.querySelector('#name-input-link');
 
-openPopupElementsEl.addEventListener('click', function () {
+addButtonEl.addEventListener('click', function () {
   openPopup(addPopupEl);
-});
-
-closePopupElementsEl.addEventListener('click', function () {
-  closePopup(addPopupEl);
 });
 
 addFormEl.addEventListener('submit', function (event) {
   event.preventDefault();
   const newElement = createElementFromForm();
   elementsEl.prepend(newElement);
+  addFormEl.reset();
+  closePopup(addPopupEl);
 });
 
 function createElementFromForm() {
   const newElement = elementItemEl.cloneNode(true);
   const textCard = newElement.querySelector('.element__text');
-  textCard.textContent = nameInputCardEl.value;
   const imageCard = newElement.querySelector('.element__img');
-  imageCard.src = nameTnputLinkEl.value;
-  const deleteButton = newElement.querySelector('.delete-button');
+  const popupImage = popupCard.querySelector('.popup__image');
+  const popupTitleImg = popupCard.querySelector('.popup__title-image');
+  textCard.textContent = nameInputCardEl.value;
+  imageCard.src = nameInputLinkEl.value;
+  imageCard.alt = nameInputCardEl.value;
 
+  const deleteButton = newElement.querySelector('.delete-button');
   deleteButton.addEventListener('click', function () {
     elementsEl.removeChild(newElement);
   });
 
+  const likeButton = newElement.querySelector('.like-button');
+  likeButton.addEventListener('click', function () {
+    likeButton.classList.toggle('like-button_status-active');
+  });
+
+  imageCard.addEventListener('click', function () {
+    openPopup(popupCard);
+    popupImage.src = imageCard.src;
+    popupImage.alt = imageCard.alt;
+    popupTitleImg.textContent = textCard.textContent;
+  });
+
   return newElement;
 }
-
-// Попап "popupCard"
-
-const popupTriggerList = document.querySelectorAll('.element__img');
-const popupCard = document.querySelector('#popupCard');
-const popupCardImage = document.querySelector('.popupCard__image');
-const popupCardTitle = document.querySelector('.popupCard__title-image');
-const popupCardCloseButton = document.querySelector('#close-popupCard-button');
-
-popupTriggerList.forEach(trigger => {
-  trigger.addEventListener('click', openPopupCard);
-});
-
-popupCardCloseButton.addEventListener('click', closePopupCard);
-
-function openPopupCard(event) {
-  const clickedCard = event.target.closest('.element');
-  const clickedImage = event.target;
-  const imageURL = clickedImage.getAttribute('src');
-  const imageTiltle = clickedCard.querySelector('.element__text').textContent;
-  popupCardImage.setAttribute('src', imageURL);
-  popupCardTitle.textContent = imageTiltle;
-  popupCard.classList.add('popup_is-opened');
-}
-
-function closePopupCard() {
-  popupCard.classList.remove('popup_is-opened');
-}
-
-// button "like"
-const buttonsLike = document.querySelectorAll('.like-button');
-let isImageChanged = false;
-buttonsLike.forEach(function (button) {
-  button.addEventListener('click', function () {
-    if (isImageChanged) {
-      button.style.backgroundImage = "url('../../images/likeButton.svg')";
-      isImageChanged = false;
-    } else {
-      button.style.backgroundImage = "url('../../images/likeButton_active.svg')";
-      isImageChanged = true;
-    }
-  });
-});
