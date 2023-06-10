@@ -1,4 +1,4 @@
-const initialCards = [
+const item = [
   {
     name: 'Архыз',
     link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
@@ -33,10 +33,22 @@ const profileSubTitleEl = document.querySelector('.profile__subtitle');
 const nameInputTitleEl = document.querySelector('#name-input-title');
 const nameInputSubTitleEl = document.querySelector('#name-input-subtitle');
 const editFormEl = document.querySelector('#edit-form');
-const closePopupButtonsEl = document.querySelectorAll('.popup__close-button');
+const closePopupButtons = document.querySelectorAll('.popup__close-button');
+const template = document.querySelector('#template-element');
+const templateContent = template.content;
+const elementItemEl = templateContent.querySelector('.element');
+const elementsEl = document.querySelector('.elements');
+const popupCard = document.querySelector('#popupCard');
+const popupImage = popupCard.querySelector('.popup__image');
+const popupTitleImg = popupCard.querySelector('.popup__title-image');
+const addButtonEl = document.querySelector('#add-button');
+const addPopupEl = document.querySelector('#popup-add-element');
+const addFormEl = document.querySelector('#add-form');
+const nameInputCardEl = document.querySelector('#name-input-card');
+const nameInputLinkEl = document.querySelector('#name-input-link');
 
 // Закрытие всех попапов по кнопке
-closePopupButtonsEl.forEach(button => {
+closePopupButtons.forEach(button => {
   const popup = button.closest('.popup');
   button.addEventListener('click', () => closePopup(popup));
 });
@@ -64,31 +76,23 @@ editFormEl.addEventListener('submit', function (event) {
 
 // Добавление  и удаление initialCards в elements
 
-const template = document.querySelector('#template-element');
-const templateContent = template.content;
-const elementItemEl = templateContent.querySelector('.element');
-const elementsEl = document.querySelector('.elements');
-
-initialCards.forEach(function (item) {
+item.forEach(function (item) {
   const newElement = createElement(item);
   elementsEl.prepend(newElement);
 });
 
-function createElement(initialCards) {
+function createElement(item) {
   const newElement = elementItemEl.cloneNode(true);
   const textCard = newElement.querySelector('.element__text');
   const imageCard = newElement.querySelector('.element__img');
-  const popupCard = document.querySelector('#popupCard');
-  const popupImage = popupCard.querySelector('.popup__image');
-  const popupTitleImg = popupCard.querySelector('.popup__title-image');
 
-  textCard.textContent = initialCards.name;
-  imageCard.src = initialCards.link;
-  imageCard.alt = initialCards.name;
+  textCard.textContent = item.name;
+  imageCard.src = item.link;
+  imageCard.alt = item.name;
 
   const deleteButton = newElement.querySelector('.delete-button');
   deleteButton.addEventListener('click', function () {
-    elementsEl.removeChild(newElement);
+    newElement.remove();
   });
 
   const likeButton = newElement.querySelector('.like-button');
@@ -107,11 +111,6 @@ function createElement(initialCards) {
 }
 
 // Попап "section elements"
-const addButtonEl = document.querySelector('#add-button');
-const addPopupEl = document.querySelector('#popup-add-element');
-const addFormEl = document.querySelector('#add-form');
-const nameInputCardEl = document.querySelector('#name-input-card');
-const nameInputLinkEl = document.querySelector('#name-input-link');
 
 addButtonEl.addEventListener('click', function () {
   openPopup(addPopupEl);
@@ -119,38 +118,12 @@ addButtonEl.addEventListener('click', function () {
 
 addFormEl.addEventListener('submit', function (event) {
   event.preventDefault();
-  const newElement = createElementFromForm();
+  const item = {
+    name: nameInputCardEl.value,
+    link: nameInputLinkEl.value
+  };
+  const newElement = createElement(item);
   elementsEl.prepend(newElement);
   addFormEl.reset();
   closePopup(addPopupEl);
 });
-
-function createElementFromForm() {
-  const newElement = elementItemEl.cloneNode(true);
-  const textCard = newElement.querySelector('.element__text');
-  const imageCard = newElement.querySelector('.element__img');
-  const popupImage = popupCard.querySelector('.popup__image');
-  const popupTitleImg = popupCard.querySelector('.popup__title-image');
-  textCard.textContent = nameInputCardEl.value;
-  imageCard.src = nameInputLinkEl.value;
-  imageCard.alt = nameInputCardEl.value;
-
-  const deleteButton = newElement.querySelector('.delete-button');
-  deleteButton.addEventListener('click', function () {
-    elementsEl.removeChild(newElement);
-  });
-
-  const likeButton = newElement.querySelector('.like-button');
-  likeButton.addEventListener('click', function () {
-    likeButton.classList.toggle('like-button_status-active');
-  });
-
-  imageCard.addEventListener('click', function () {
-    openPopup(popupCard);
-    popupImage.src = imageCard.src;
-    popupImage.alt = imageCard.alt;
-    popupTitleImg.textContent = textCard.textContent;
-  });
-
-  return newElement;
-}
