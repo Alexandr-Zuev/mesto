@@ -46,6 +46,7 @@ const addPopupEl = document.querySelector('#popup-add-element');
 const addFormEl = document.querySelector('#add-form');
 const nameInputCardEl = document.querySelector('#name-input-card');
 const nameInputLinkEl = document.querySelector('#name-input-link');
+const popups = document.querySelectorAll('.popup');
 
 // Закрытие всех попапов по кнопке
 closePopupButtons.forEach(button => {
@@ -126,4 +127,18 @@ addFormEl.addEventListener('submit', function (event) {
   elementsEl.prepend(newElement);
   addFormEl.reset();
   closePopup(addPopupEl);
+});
+
+popups.forEach(popup => {
+  popup.addEventListener('click', function (event) {
+    if (event.target === event.currentTarget) {
+      closePopup(popup);
+    }
+  });
+
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') {
+      closePopup(popup);
+    }
+  });
 });

@@ -22,9 +22,17 @@ const checkInputValidity = (formElement, inputElement) => {
 
 const setEventListeners = formElement => {
   const inputList = Array.from(formElement.querySelectorAll('.popup__input'));
+  const buttonElement = formElement.querySelector('.popup__button');
+  toggleButtonState(inputList, buttonElement);
   inputList.forEach(inputElement => {
     inputElement.addEventListener('input', function () {
       checkInputValidity(formElement, inputElement);
+      toggleButtonState(inputList, buttonElement);
+    });
+    inputElement.addEventListener('keydown', function (evt) {
+      if (evt.key === 'Enter' && !inputElement.validity.valid) {
+        evt.preventDefault();
+      }
     });
   });
 };
@@ -41,3 +49,17 @@ function enableValidation() {
 }
 
 enableValidation();
+
+function hasInvalidInput(inputList) {
+  return inputList.some(inputElement => {
+    return !inputElement.validity.valid;
+  });
+}
+
+function toggleButtonState(inputList, buttonElement) {
+  if (hasInvalidInput(inputList)) {
+    buttonElement.classList.add('popup__button_disabled');
+  } else {
+    buttonElement.classList.remove('popup__button_disabled');
+  }
+}
