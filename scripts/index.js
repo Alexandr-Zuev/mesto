@@ -56,10 +56,26 @@ closePopupButtons.forEach(button => {
 
 function openPopup(popupEl) {
   popupEl.classList.add('popup_is-opened');
+
+  clickListener = function (event) {
+    if (event.target === event.currentTarget) {
+      closePopup(popupEl);
+    }
+  };
+  popupEl.addEventListener('click', clickListener);
+
+  keyDownListener = function (event) {
+    if (event.key === 'Escape') {
+      closePopup(popupEl);
+    }
+  };
+  document.addEventListener('keydown', keyDownListener);
 }
 
 function closePopup(popupEl) {
   popupEl.classList.remove('popup_is-opened');
+  document.removeEventListener('keydown', keyDownListener);
+  popupEl.removeEventListener('click', clickListener);
 }
 
 openPopupProfileEl.addEventListener('click', function () {
@@ -114,6 +130,9 @@ function createElement(item) {
 // Попап "section elements"
 
 addButtonEl.addEventListener('click', function () {
+  addFormEl.reset();
+  const buttonElement = document.querySelector('#popup-card-button');
+  buttonElement.classList.add('popup__button_disabled');
   openPopup(addPopupEl);
 });
 
@@ -127,18 +146,4 @@ addFormEl.addEventListener('submit', function (event) {
   elementsEl.prepend(newElement);
   addFormEl.reset();
   closePopup(addPopupEl);
-});
-
-popups.forEach(popup => {
-  popup.addEventListener('click', function (event) {
-    if (event.target === event.currentTarget) {
-      closePopup(popup);
-    }
-  });
-
-  document.addEventListener('keydown', function (event) {
-    if (event.key === 'Escape') {
-      closePopup(popup);
-    }
-  });
 });
