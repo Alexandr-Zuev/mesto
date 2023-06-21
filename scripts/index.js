@@ -57,14 +57,14 @@ closePopupButtons.forEach(button => {
 function openPopup(popupEl) {
   popupEl.classList.add('popup_is-opened');
 
-  clickListener = function (event) {
+  const clickListener = function (event) {
     if (event.target === event.currentTarget) {
       closePopup(popupEl);
     }
   };
   popupEl.addEventListener('click', clickListener);
 
-  keyDownListener = function (event) {
+  const keyDownListener = function (event) {
     if (event.key === 'Escape') {
       closePopup(popupEl);
     }
@@ -131,8 +131,7 @@ function createElement(item) {
 
 addButtonEl.addEventListener('click', function () {
   addFormEl.reset();
-  const buttonElement = document.querySelector('#popup-card-button');
-  buttonElement.classList.add('popup__button_disabled');
+  disableSubmitButton();
   openPopup(addPopupEl);
 });
 

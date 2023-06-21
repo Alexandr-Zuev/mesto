@@ -70,8 +70,15 @@ function hasInvalidInput(inputList) {
 
 function toggleButtonState(inputList, buttonElement, { inactiveButtonClass }) {
   if (hasInvalidInput(inputList)) {
-    buttonElement.classList.add(inactiveButtonClass);
+    disableSubmitButton();
   } else {
     buttonElement.classList.remove(inactiveButtonClass);
   }
+}
+
+function disableSubmitButton() {
+  const submitPopupButtons = document.querySelectorAll('.popup__button');
+  submitPopupButtons.forEach(buttonElement => {
+    buttonElement.classList.add('popup__button_disabled');
+  });
 }
