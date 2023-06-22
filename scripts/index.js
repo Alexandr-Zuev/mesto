@@ -54,28 +54,34 @@ closePopupButtons.forEach(button => {
   button.addEventListener('click', () => closePopup(popup));
 });
 
+const clickListener = function (event) {
+  if (event.target === event.currentTarget) {
+    const openPopupEl = document.querySelector('.popup_is-opened');
+    if (openPopupEl) {
+      closePopup(openPopupEl);
+    }
+  }
+};
+
+const keyDownListener = function (event) {
+  if (event.key === 'Escape') {
+    const openPopupEl = document.querySelector('.popup_is-opened');
+    if (openPopupEl) {
+      closePopup(openPopupEl);
+    }
+  }
+};
+
 function openPopup(popupEl) {
   popupEl.classList.add('popup_is-opened');
-
-  const clickListener = function (event) {
-    if (event.target === event.currentTarget) {
-      closePopup(popupEl);
-    }
-  };
   popupEl.addEventListener('click', clickListener);
-
-  const keyDownListener = function (event) {
-    if (event.key === 'Escape') {
-      closePopup(popupEl);
-    }
-  };
   document.addEventListener('keydown', keyDownListener);
 }
 
 function closePopup(popupEl) {
   popupEl.classList.remove('popup_is-opened');
-  document.removeEventListener('keydown', keyDownListener);
   popupEl.removeEventListener('click', clickListener);
+  document.removeEventListener('keydown', keyDownListener);
 }
 
 openPopupProfileEl.addEventListener('click', function () {
@@ -130,8 +136,9 @@ function createElement(item) {
 // Попап "section elements"
 
 addButtonEl.addEventListener('click', function () {
+  const buttonElement = addFormEl.querySelector('.popup__button');
+  disableSubmitButton(buttonElement);
   addFormEl.reset();
-  disableSubmitButton();
   openPopup(addPopupEl);
 });
 
