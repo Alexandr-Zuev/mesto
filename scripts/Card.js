@@ -1,11 +1,13 @@
 export class Card {
-  constructor(data, templateSelector) {
+  constructor(data, templateSelector, popupCardEl, openPopup, closePopup) {
     this._name = data.name;
     this._link = data.link;
     this._templateSelector = templateSelector;
+    this._popupCardEl = popupCardEl;
+    this._openPopup = openPopup;
+    this._closePopup = closePopup;
   }
-
-  _getTemplate() {
+    _getTemplate() {
     const cardElement = document
       .querySelector(this._templateSelector)
       .content.querySelector(".element")
@@ -39,34 +41,11 @@ export class Card {
 
     this._element
       .querySelector(".element__img")
-      .addEventListener("click", () => {
-        const popupEl = document.querySelector("#popupCard");
-        const popupImage = popupEl.querySelector(".popup__image");
-        const popupTitleImg = popupEl.querySelector(".popup__title-image");
-        popupEl.classList.add("popup_is-opened");
-        popupImage.src = this._link;
-        popupImage.alt = this._name;
-        popupTitleImg.textContent = this._name;
-        popupEl.addEventListener("click", this._handleOverlayClick);
-        document.addEventListener("keydown", this._handleEscClose);
+      .addEventListener("click", () => {  
+        this._openPopup(this._popupCardEl);
+        this._popupCardEl.querySelector(".popup__image").src = this._link;
+        this._popupCardEl.querySelector(".popup__image").alt = this._name;
+        this._popupCardEl.querySelector(".popup__title-image").textContent = this._name;
       });
   }
-
-  _handleEscClose = (event) => {
-    if (event.key === "Escape") {
-      const popupEl = document.querySelector("#popupCard");
-      popupEl.classList.remove("popup_is-opened");
-      popupEl.removeEventListener("click", this._handleOverlayClick);
-      document.removeEventListener("keydown", this._handleEscClose);
-    }
-  };
-
-  _handleOverlayClick = (event) => {
-    if (event.target === event.currentTarget) {
-      const popupEl = document.querySelector("#popupCard");
-      popupEl.classList.remove("popup_is-opened");
-      popupEl.removeEventListener("click", this._handleOverlayClick);
-      document.removeEventListener("keydown", this._handleEscClose);
-    }
-  };
 }

@@ -1,41 +1,6 @@
 import { Card } from './Card.js';
 import { FormValidator } from './FormValidator.js';
-
-const item = [
-  {
-    name: 'Архыз',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-  },
-  {
-    name: 'Челябинская область',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-  },
-  {
-    name: 'Иваново',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-  },
-  {
-    name: 'Камчатка',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-  },
-  {
-    name: 'Холмогорский район',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-  },
-  {
-    name: 'Байкал',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-  }
-];
-
-const config = {
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input',
-  submitButtonSelector: '.popup__button',
-  inactiveButtonClass: 'popup__button_disabled',
-  inputErrorClass: 'popup__input_type_error',
-  errorClass: 'popup__error_visible'
-};
+import { item, config } from './data.js';
 
 const openPopupProfileEl = document.querySelector('#open-popup-profile-button');
 const editPopupEl = document.querySelector('#popup-edit-profile');
@@ -52,16 +17,28 @@ const addFormEl = document.querySelector('#add-form');
 const nameInputCardEl = document.querySelector('#name-input-card');
 const nameInputLinkEl = document.querySelector('#name-input-link');
 const formList = Array.from(document.querySelectorAll('.popup__form'));
+const popupList = Array.from(document.querySelectorAll('.popup'));
+const popupCardEl = document.querySelector('#popupCard');
+const formValidators = [];
 
 item.forEach(item => {
-  const card = new Card(item, '#template-element');
-  const cardElement = card.generateCard();
+  const cardElement = createCard(item);
   elementsEl.append(cardElement);
 });
 
 formList.forEach(formElement => {
   const formValidator = new FormValidator(config, formElement);
   formValidator.enableValidation();
+  formValidators.push(formValidator);
+});
+
+popupList.forEach(popup => {
+  popup.addEventListener('mouseup', event => {
+    const targetClassList = event.target.classList;
+    if (targetClassList.contains('popup') || targetClassList.contains('popup__close')) {
+      closePopup(popup);
+    }
+  });
 });
 
 closePopupButtons.forEach(button => {
@@ -69,26 +46,20 @@ closePopupButtons.forEach(button => {
   button.addEventListener('click', () => closePopup(popup));
 });
 
+function createCard(item) {
+  const card = new Card(item, '#template-element', popupCardEl, openPopup, closePopup);
+  return card.generateCard();
+}
+
 function closePopup(popupEl) {
   popupEl.classList.remove('popup_is-opened');
-  popupEl.removeEventListener('click', clickListener);
   document.removeEventListener('keydown', keyDownListener);
 }
 
 function openPopup(popupEl) {
   popupEl.classList.add('popup_is-opened');
-  popupEl.addEventListener('click', clickListener);
   document.addEventListener('keydown', keyDownListener);
 }
-
-const clickListener = function (event) {
-  if (event.target === event.currentTarget) {
-    const openPopupEl = document.querySelector('.popup_is-opened');
-    if (openPopupEl) {
-      closePopup(openPopupEl);
-    }
-  }
-};
 
 const keyDownListener = function (event) {
   if (event.key === 'Escape') {
@@ -113,9 +84,9 @@ editFormEl.addEventListener('submit', function (event) {
 });
 
 addButtonEl.addEventListener('click', function () {
-  const buttonElement = addFormEl.querySelector('.popup__button');
-  buttonElement.classList.add('popup__button_disabled');
+  const addFormValidator = formValidators.find(validator => validator._name === 'add-form');
   addFormEl.reset();
+  addFormValidator.resetValidation();
   openPopup(addPopupEl);
 });
 
@@ -125,8 +96,7 @@ addFormEl.addEventListener('submit', function (event) {
     name: nameInputCardEl.value,
     link: nameInputLinkEl.value
   };
-  const card = new Card(item, '#template-element');
-  const cardElement = card.generateCard();
+  const cardElement = createCard(item);
   elementsEl.prepend(cardElement);
   addFormEl.reset();
   closePopup(addPopupEl);
