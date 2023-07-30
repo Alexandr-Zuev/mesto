@@ -1,3 +1,4 @@
+import '../pages/index.css';
 import {
   items,
   config,
@@ -51,7 +52,7 @@ const userInfoPopup = new UserInfo('#popup-edit-profile', {
 
 openPopupProfileEl.addEventListener('click', function () {
   const currentUserInfo = userInfoPopup.getUserInfo();
-  console.log(currentUserInfo);
+
   userInfoPopup.open(currentUserInfo);
   userInfoPopup.setEventListeners();
 });
@@ -62,7 +63,6 @@ editFormEl.addEventListener('submit', function (event) {
   userInfoPopup.setUserInfo(newUserInfo);
   userInfoPopup.close();
 });
-
 
 addButtonEl.addEventListener('click', function () {
   const addFormValidator = formValidators.find(validator => validator._name === 'add-form');
