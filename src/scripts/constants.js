@@ -36,7 +36,6 @@ const config = {
 
 const openPopupProfileEl = document.querySelector('#open-popup-profile-button');
 const editPopupEl = document.querySelector('#popup-edit-profile');
-const editFormEl = document.querySelector('#edit-form');
 const elementsEl = document.querySelector('.elements');
 const addButtonEl = document.querySelector('#add-button');
 const addPopupEl = document.querySelector('#popup-add-element');
@@ -50,7 +49,6 @@ export {
   config,
   openPopupProfileEl,
   editPopupEl,
-  editFormEl,
   elementsEl,
   addButtonEl,
   addPopupEl,

@@ -3,7 +3,6 @@ import {
   items,
   config,
   openPopupProfileEl,
-  editFormEl,
   elementsEl,
   addButtonEl,
   formList,
@@ -16,17 +15,17 @@ import { PopupWithImage } from './PopupWithImage.js';
 import { PopupWithForm } from './PopupWithForm.js';
 import { UserInfo } from './UserInfo.js';
 
-const CardSection = new Section(
+const cardSection = new Section(
   {
     items: items,
     renderer: item => {
       const cardElement = createCard(item);
-      CardSection.addItem(cardElement);
+      cardSection.addItem(cardElement);
     }
   },
   elementsEl
 );
-CardSection.renderItems();
+cardSection.renderItems();
 
 formList.forEach(formElement => {
   const formValidator = new FormValidator(config, formElement);
@@ -40,37 +39,40 @@ function createCard(item) {
 }
 
 function handleCardClick(imageSrc, imageCaption) {
-  const imagePopup = new PopupWithImage('#popupCard');
   imagePopup.open(imageSrc, imageCaption);
-  imagePopup.setEventListeners();
 }
 
-const userInfoPopup = new UserInfo('#popup-edit-profile', {
-  nameElementSelector: '.profile__title',
-  aboutElementSelector: '.profile__subtitle'
+const addPopup = new PopupWithForm('#popup-add-element', () => {
+  const data = addPopup.getInputValues();
+  const item = {
+    name: data['name-input-card'],
+    link: data['name-input-link']
+  };
+  const cardElement = createCard(item);
+  elementsEl.prepend(cardElement);
 });
+addPopup.setEventListeners();
+
+const imagePopup = new PopupWithImage('#popupCard');
+imagePopup.setEventListeners();
+
+const userInfoPopup = new PopupWithForm('#popup-edit-profile', () => {
+  const receivedUserInfo = userInfoPopup.getInputValues();
+  userInfo.setUserInfo(receivedUserInfo);
+});
+
+userInfoPopup.setEventListeners();
+
+const userInfo = new UserInfo('.profile__title', '.profile__subtitle');
 
 openPopupProfileEl.addEventListener('click', function () {
-  const currentUserInfo = userInfoPopup.getUserInfo();
-
-  userInfoPopup.open(currentUserInfo);
-  userInfoPopup.setEventListeners();
-});
-
-editFormEl.addEventListener('submit', function (event) {
-  event.preventDefault();
-  const newUserInfo = userInfoPopup.getUserInfo();
-  userInfoPopup.setUserInfo(newUserInfo);
-  userInfoPopup.close();
+  const currentUserInfo = userInfo.getUserInfo();
+  userInfoPopup.setInputValues(currentUserInfo);
+  userInfoPopup.open();
 });
 
 addButtonEl.addEventListener('click', function () {
   const addFormValidator = formValidators.find(validator => validator._name === 'add-form');
   addFormValidator.resetValidation();
-  const addPopup = new PopupWithForm('#popup-add-element', item => {
-    const cardElement = createCard(item);
-    elementsEl.prepend(cardElement);
-  });
   addPopup.open();
-  addPopup.setEventListeners();
 });
