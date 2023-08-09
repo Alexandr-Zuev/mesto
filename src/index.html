@@ -5,16 +5,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="#" />
+    <link rel="stylesheet" href="./pages/index.css" />
+    <script type="module" src="./scripts/index.js" defer></script>
     <title>Mesto</title>
   </head>
   <body class="root">
     <div class="page">
       <header class="header">
-        <img class="logo" src="<%=require('./images/logo.svg')%>" alt="Место" />
+        <img class="logo" src="./images/logo.svg" alt="Место" />
       </header>
       <main class="content">
         <section class="profile">
-          <img src="<%=require('./images/avatar.png')%>" alt="аватар" class="profile__avatar" />
+          <img src="./images/avatar.png" alt="аватар" class="profile__avatar" />
           <div class="profile__info">
             <div class="profile__info-title">
               <h1 class="profile__title">Жак-Ив Кусто</h1>
@@ -31,7 +33,10 @@
               <button class="delete-button" type="button"></button>
               <div class="element__group">
                 <h2 class="element__text"></h2>
-                <button class="like-button" type="button"></button>
+                <div class="element__like">
+                  <button class="like-button" type="button"></button>
+                  <p class="like-button_count">0</p>
+                </div>
               </div>
             </article>
           </template>
@@ -99,6 +104,16 @@
             <button class="popup__close-button" type="button"></button>
             <img src=" " alt="" class="popup__image" />
             <p class="popup__title-image"></p>
+          </div>
+        </div>
+
+        <div id="popup-confirm" class="popup">
+          <div class="popup__content">
+            <button class="popup__close-button" type="button"></button>
+            <form id="add-form" class="popup__form" name="add-form" novalidate>
+              <h2 class="popup__title popup__title-add-form">Вы уверены?</h2>
+              <button id="popup-card-button" type="submit" class="popup__button">Да</button>
+            </form>
           </div>
         </div>
       </main>
