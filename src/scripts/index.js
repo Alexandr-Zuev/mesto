@@ -1,12 +1,14 @@
+import '../pages/index.css';
 import { Api } from './api.js';
-
 import {
   config,
   openPopupProfileEl,
   elementsEl,
   addButtonEl,
   formList,
-  formValidators
+  formValidators,
+  editaVaPopupEl,
+  avaEL
 } from './constants.js';
 import { Card } from './Card.js';
 import { FormValidator } from './FormValidator.js';
@@ -26,7 +28,6 @@ const api = new Api({
   }
 });
 
-// добавление инфо профиля с сервера
 async function fetchgetUserInfo() {
   try {
     return await api.getUserInfo();
@@ -38,7 +39,6 @@ const fetchUserInfo = await fetchgetUserInfo();
 userInfo.setUserInfo(fetchUserInfo);
 const userId = fetchUserInfo._id;
 
-// Добавляем карточки с сервера
 async function fetchInitialCards() {
   try {
     return await api.getInitialCards();
@@ -60,7 +60,6 @@ const cardSection = new Section(
   elementsEl
 );
 cardSection.renderItems();
-//
 
 formList.forEach(formElement => {
   const formValidator = new FormValidator(config, formElement);
@@ -69,10 +68,28 @@ formList.forEach(formElement => {
 });
 
 function createCard(item) {
-  const card = new Card(item, '#template-element', handleCardClick, handleDeleteConfirm, userId);
+  const card = new Card(
+    item,
+    '#template-element',
+    handleCardClick,
+    handleDeleteConfirm,
+    userId,
+    handlelikeCard,
+    handleunlikeCard
+  );
   const cardElement = card.generateCard();
   cardElement.setAttribute('card-id', item._id);
   return cardElement;
+}
+
+function handlelikeCard(cardElement) {
+  const cardId = cardElement.getAttribute('card-id');
+  api.likeCard(cardId);
+}
+
+function handleunlikeCard(cardElement) {
+  const cardId = cardElement.getAttribute('card-id');
+  api.unlikeCard(cardId);
 }
 
 function handleCardClick(imageSrc, imageCaption) {
@@ -96,20 +113,26 @@ function handleDeleteConfirm(cardElement) {
 }
 
 const addPopup = new PopupWithForm('#popup-add-element', () => {
+  const submitButton = addPopup._formElement.querySelector('.popup__button');
   const data = addPopup.getInputValues();
   const item = {
     name: data['name'],
     link: data['about']
   };
-
+  submitButton.textContent = 'Создание...';
+  submitButton.disabled = true;
   api
     .addNewCard(item)
     .then(card => {
       const cardElement = createCard(card);
       elementsEl.prepend(cardElement);
+      submitButton.textContent = 'Создать';
+      submitButton.disabled = false;
       addPopup.close();
     })
     .catch(error => {
+      submitButton.textContent = 'Создать';
+      submitButton.disabled = false;
       console.error('Ошибка при добавлении новой карточки:', error);
     });
 });
@@ -121,13 +144,21 @@ imagePopup.setEventListeners();
 
 const userInfoPopup = new PopupWithForm('#popup-edit-profile', () => {
   const receivedUserInfo = userInfoPopup.getInputValues();
+  const submitButton = userInfoPopup._formElement.querySelector('.popup__button');
+  submitButton.textContent = 'Сохранение...';
+  submitButton.disabled = true;
+
   api
     .editProfile(receivedUserInfo)
     .then(updatedUser => {
       userInfo.setUserInfo(updatedUser);
+      submitButton.textContent = 'Сохранить';
+      submitButton.disabled = false;
       userInfoPopup.close();
     })
     .catch(error => {
+      submitButton.textContent = 'Сохранить';
+      submitButton.disabled = false;
       console.error('Ошибка при обновлении профиля:', error);
     });
 });
@@ -138,6 +169,34 @@ openPopupProfileEl.addEventListener('click', function () {
   const currentUserInfo = userInfo.getUserInfo();
   userInfoPopup.setInputValues(currentUserInfo);
   userInfoPopup.open();
+});
+
+const avaPopup = new PopupWithForm('#popup-update-avatar', () => {
+  const submitButton = avaPopup._formElement.querySelector('.popup__button');
+  const inputValues = avaPopup.getInputValues();
+
+  submitButton.textContent = 'Сохранение...';
+  submitButton.disabled = true;
+
+  api
+    .updateAvatar(inputValues.about)
+    .then(() => {
+      avaEL.src = inputValues.about;
+      submitButton.textContent = 'Сохранить';
+      submitButton.disabled = false;
+      avaPopup.close();
+    })
+    .catch(error => {
+      submitButton.textContent = 'Сохранить';
+      submitButton.disabled = false;
+      console.error('Ошибка при обновлении аватара:', error);
+    });
+});
+avaPopup.setEventListeners();
+
+editaVaPopupEl.addEventListener('click', function () {
+  avaPopup.setInputValues({ about: avaEL.src });
+  avaPopup.open();
 });
 
 addButtonEl.addEventListener('click', function () {

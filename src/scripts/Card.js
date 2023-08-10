@@ -1,10 +1,20 @@
 export class Card {
-  constructor(data, templateSelector, handleCardClick, handleDeleteConfirm, userId) {
+  constructor(
+    data,
+    templateSelector,
+    handleCardClick,
+    handleDeleteConfirm,
+    userId,
+    handlelikeCard,
+    handleunlikeCard
+  ) {
     this._name = data.name;
     this._link = data.link;
     this._currentUserId = data.owner._id;
     this._templateSelector = templateSelector;
     this._handleCardClick = handleCardClick;
+    this._handlelikeCard = handlelikeCard;
+    this._handleunlikeCard = handleunlikeCard;
     this._handleDeleteConfirm = handleDeleteConfirm;
     this._likesCount = data.likes.length;
     this._userId = userId;
@@ -19,7 +29,6 @@ export class Card {
       .querySelector(this._templateSelector)
       .content.querySelector('.element')
       .cloneNode(true);
-
     return cardElement;
   }
 
@@ -27,7 +36,9 @@ export class Card {
     this._element = this._getTemplate();
     this._element.querySelector('.element__text').textContent = this._name;
     this._element.querySelector('.element__img').src = this._link;
+    this._likeButton = this._element.querySelector('.like-button');
     this._setEventListeners();
+    this._element.querySelector('.like-button_count').textContent = this._likesCount;
 
     if (this.isOwnedByCurrentUser()) {
       const deleteButton = this._element.querySelector('.delete-button');
@@ -37,10 +48,17 @@ export class Card {
   }
 
   _setEventListeners() {
-    this._element.querySelector('.like-button').addEventListener('click', () => {
-      const likeButton = this._element.querySelector('.like-button');
-      likeButton.classList.toggle('like-button_status-active');
-      this._updateLikesCount(likeButton.classList.contains('like-button_status-active'));
+    this._likeButton.addEventListener('click', () => {
+      const isLiked = !this._likeButton.classList.contains('like-button_status-active');
+
+      if (isLiked) {
+        this._handlelikeCard(this._element);
+        this._likeButton.classList.toggle('like-button_status-active');
+      } else {
+        this._handleunlikeCard(this._element);
+        this._likeButton.classList.toggle('like-button_status-active');
+      }
+      this._updateLikesCount(isLiked);
     });
 
     this._element.querySelector('.delete-button').addEventListener('click', () => {

@@ -7,6 +7,7 @@ const config = {
   errorClass: 'popup__error_visible'
 };
 
+const editaVaPopupEl = document.querySelector('.profile__avatar-icon-up');
 const openPopupProfileEl = document.querySelector('#open-popup-profile-button');
 const editPopupEl = document.querySelector('#popup-edit-profile');
 const elementsEl = document.querySelector('.elements');
@@ -15,10 +16,12 @@ const addPopupEl = document.querySelector('#popup-add-element');
 const formList = Array.from(document.querySelectorAll('.popup__form'));
 const popupList = Array.from(document.querySelectorAll('.popup'));
 const popupCardEl = document.querySelector('#popupCard');
+const avaEL = document.querySelector('.profile__avatar');
 const formValidators = [];
 
 export {
   config,
+  editaVaPopupEl,
   openPopupProfileEl,
   editPopupEl,
   elementsEl,
@@ -27,5 +30,6 @@ export {
   formList,
   popupList,
   popupCardEl,
-  formValidators
+  formValidators,
+  avaEL
 };
