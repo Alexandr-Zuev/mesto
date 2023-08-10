@@ -122,7 +122,7 @@
             <button class="popup__close-button" type="button"></button>
             <form id="confirm-form" class="popup__form" name="confirm-form" novalidate>
               <h2 class="popup__title popup__title-add-form">Вы уверены?</h2>
-              <button id="popup-card-button" type="submit" class="popup__button">Да</button>
+              <button id="popup-confirm-button" type="submit" class="popup__button">Да</button>
             </form>
           </div>
         </div>
@@ -133,15 +133,17 @@
             <form id="avatar-form" class="popup__form" name="avatar-form" novalidate>
               <h2 class="popup__title popup__title-add-form">Обновить аватар</h2>
               <input
-                id="name-input-link"
+                id="update-avatar-link"
                 type="url"
                 class="popup__input"
                 name="name-input-subtitle"
                 placeholder="Ссылка на аватар"
                 required
               />
-              <span id="name-input-link-error" class="popup__error"></span>
-              <button id="popup-card-button" type="submit" class="popup__button">Сохранить</button>
+              <span id="update-input-link-error" class="popup__error"></span>
+              <button id="popup-update-button" type="submit" class="popup__button">
+                Сохранить
+              </button>
             </form>
           </div>
         </div>
