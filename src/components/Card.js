@@ -24,6 +24,10 @@ export class Card {
     return this._userId !== this._currentUserId;
   }
 
+  deleteCard(cardElement) {
+    cardElement.remove();
+  }
+
   _getTemplate() {
     const cardElement = document
       .querySelector(this._templateSelector)
@@ -36,10 +40,8 @@ export class Card {
     this._element = this._getTemplate();
     this._element.querySelector('.element__text').textContent = this._name;
     this._element.querySelector('.element__img').src = this._link;
-    this._likeButton = this._element.querySelector('.like-button');
-    this._setEventListeners();
     this._element.querySelector('.like-button_count').textContent = this._likesCount;
-
+    this._setEventListeners();
     if (this.isOwnedByCurrentUser()) {
       const deleteButton = this._element.querySelector('.delete-button');
       deleteButton.remove();
@@ -48,15 +50,13 @@ export class Card {
   }
 
   _setEventListeners() {
+    this._likeButton = this._element.querySelector('.like-button');
     this._likeButton.addEventListener('click', () => {
       const isLiked = !this._likeButton.classList.contains('like-button_status-active');
-
       if (isLiked) {
         this._handlelikeCard(this._element);
-        this._likeButton.classList.toggle('like-button_status-active');
       } else {
         this._handleunlikeCard(this._element);
-        this._likeButton.classList.toggle('like-button_status-active');
       }
       this._updateLikesCount(isLiked);
     });

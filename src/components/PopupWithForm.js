@@ -13,7 +13,7 @@ export class PopupWithForm extends Popup {
     super.setEventListeners();
     this._formElement.addEventListener('submit', event => {
       event.preventDefault();
-      this._submitCallback();
+      this._submitCallback(this._getInputValues());
     });
   }
 
@@ -22,26 +22,16 @@ export class PopupWithForm extends Popup {
     this._formElement.reset();
   }
 
-  getInputValues() {
-    const item = {};
+  _getInputValues() {
+    const values = {};
     this._inputList.forEach(input => {
-      item[input.name] = input.value;
+      values[input.name] = input.value;
     });
-
-    const name = item['name-input-title'] || item['name-input-card'];
-    const about = item['name-input-subtitle'] || item['name-input-link'];
-
-    return { name, about };
+    return values;
   }
 
-  setInputValues(item) {
-    this._inputList.forEach(input => {
-      if (input.name === 'name-input-title') {
-        input.value = item.name;
-      }
-      if (input.name === 'name-input-subtitle') {
-        input.value = item.about;
-      }
-    });
+  setInputValues(inputSelector, value) {
+    const input = this._formElement.querySelector(inputSelector);
+    input.value = value;
   }
 }

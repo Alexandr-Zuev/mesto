@@ -4,19 +4,18 @@ export class PopupWithConfirm extends Popup {
   constructor(popupSelector, submitCallback) {
     super(popupSelector);
     this._submitCallback = submitCallback;
-    this.card = null;
-    this._confirmButton = this._popup.querySelector('.popup__button');
+    this.confirmButton = this._popup.querySelector('.popup__button');
+  }
+
+  open(cardElement) {
+    super.open();
+    this._cardElement = cardElement;
   }
 
   setEventListeners() {
     super.setEventListeners();
-    this._confirmButton.addEventListener('click', () => {
-      this._submitCallback();
-      this.close();
+    this.confirmButton.addEventListener('click', () => {
+      this._submitCallback(this._cardElement);
     });
-  }
-
-  setCard(card) {
-    this.card = card;
   }
 }
