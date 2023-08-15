@@ -24,8 +24,8 @@ export class Card {
     return this._userId !== this._currentUserId;
   }
 
-  deleteCard(cardElement) {
-    cardElement.remove();
+  remove() {
+    this.element.remove();
   }
 
   _getTemplate() {
