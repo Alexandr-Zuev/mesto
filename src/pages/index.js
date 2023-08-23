@@ -7,9 +7,8 @@ import {
   addButtonEl,
   formList,
   formValidators,
-  editaVaPopupEl,
-  avaEL
-} from '../components/Constants.js';
+  editaVaPopupEl
+} from '../utils/constants.js';
 import { Card } from '../components/Card.js';
 import { FormValidator } from '../components/FormValidator.js';
 import { Section } from '../components/Section.js';
@@ -26,6 +25,23 @@ const api = new Api({
   }
 });
 
+const userInfo = new UserInfo('.profile__title', '.profile__subtitle', '.profile__avatar');
+
+const imagePopup = new PopupWithImage('#popupCard');
+imagePopup.setEventListeners();
+
+Promise.all([api.getUserInfo(), api.getInitialCards()])
+
+  .then(([fetchUserInfo, fetchInitialCards]) => {
+    userInfo.setUserInfo(fetchUserInfo);
+    userInfo.setAvatar(fetchUserInfo);
+    userId = fetchUserInfo._id;
+    cardsList.renderItems(fetchInitialCards);
+  })
+  .catch(err => {
+    console.log(err);
+  });
+
 let userId;
 function createCard(item) {
   const card = new Card(
@@ -38,60 +54,47 @@ function createCard(item) {
     handleUnlikeCard
   );
   const cardElement = card.generateCard();
-  cardElement.classList.add('card-id-' + item._id);
-  return cardElement;
-}
+  cardElement.id = item._id;
 
-function getCardIdFromClass(element) {
-  const classes = element.classList;
-  for (const className of classes) {
-    if (className.startsWith('card-id-')) {
-      return className.substr('card-id-'.length);
-    }
+  function handleDeleteConfirm() {
+    confirmPopup.open(cardElement, card);
   }
-  return null;
-}
 
-function handleLikeCard(cardElement) {
-  const cardId = getCardIdFromClass(cardElement);
-  const likeButton = cardElement.querySelector('.like-button');
-  likeButton.disabled = true;
-  api
-    .likeCard(cardId)
-    .then(() => {
-      likeButton.classList.toggle('like-button_status-active');
-    })
-    .catch(err => {
-      console.log(`Ошибка при установке лайка карточки: ${err}`);
-    })
-    .finally(() => {
-      likeButton.disabled = false;
-    });
-}
+  function handleLikeCard(cardElement) {
+    card.deactivateLikeButton();
+    api
+      .likeCard(cardElement.id)
+      .then(response => {
+        card.updateLikeButton(response.likes);
+      })
+      .catch(err => {
+        console.log(`Ошибка при установке лайка карточки: ${err}`);
+      })
+      .finally(() => {
+        card.activateLikeButton();
+      });
+  }
 
-function handleUnlikeCard(cardElement) {
-  const cardId = getCardIdFromClass(cardElement);
-  const likeButton = cardElement.querySelector('.like-button');
-  likeButton.disabled = true;
-  api
-    .unlikeCard(cardId)
-    .then(() => {
-      likeButton.classList.toggle('like-button_status-active');
-    })
-    .catch(err => {
-      console.log(`Ошибка при снятии лайка с карточки: ${err}`);
-    })
-    .finally(() => {
-      likeButton.disabled = false;
-    });
+  function handleUnlikeCard(cardElement) {
+    card.deactivateLikeButton();
+    api
+      .unlikeCard(cardElement.id)
+      .then(response => {
+        card.updateLikeButton(response.likes);
+      })
+      .catch(err => {
+        console.log(`Ошибка при снятии лайка с карточки: ${err}`);
+      })
+      .finally(() => {
+        card.activateLikeButton();
+      });
+  }
+
+  return cardElement;
 }
 
 function handleCardClick(imageSrc, imageCaption) {
   imagePopup.open(imageSrc, imageCaption);
-}
-
-function handleDeleteConfirm(cardElement) {
-  confirmPopup.open(cardElement);
 }
 
 formList.forEach(formElement => {
@@ -100,17 +103,14 @@ formList.forEach(formElement => {
   formValidators.push(formValidator);
 });
 
-const confirmPopup = new PopupWithConfirm('#popup-confirm', cardElement => {
-  const cardId = getCardIdFromClass(cardElement);
+const confirmPopup = new PopupWithConfirm('#popup-confirm', (cardElement, card) => {
   const submitButton = confirmPopup.confirmButton;
-
   submitButton.textContent = 'Удаление...';
   submitButton.disabled = true;
-
   api
-    .deleteCard(cardId)
+    .deleteCard(cardElement.id)
     .then(() => {
-      cardElement.remove();
+      card.deleteCard();
       confirmPopup.close();
     })
     .catch(error => {
@@ -133,23 +133,6 @@ const cardsList = new Section(
   elementsEl
 );
 
-const userInfo = new UserInfo('.profile__title', '.profile__subtitle', '.profile__avatar');
-
-const imagePopup = new PopupWithImage('#popupCard');
-imagePopup.setEventListeners();
-
-Promise.all([api.getUserInfo(), api.getInitialCards()])
-
-  .then(([fetchUserInfo, fetchInitialCards]) => {
-    userInfo.setUserInfo(fetchUserInfo);
-    userInfo.setAvatar(fetchUserInfo);
-    userId = fetchUserInfo._id;
-    cardsList.renderItems(fetchInitialCards);
-  })
-  .catch(err => {
-    console.log(err);
-  });
-
 const addPopup = new PopupWithForm('#popup-add-element', data => {
   const submitButton = addPopup._formElement.querySelector('.popup__button');
   const item = {
@@ -162,7 +145,7 @@ const addPopup = new PopupWithForm('#popup-add-element', data => {
     .addNewCard(item)
     .then(card => {
       const cardElement = createCard(card);
-      elementsEl.prepend(cardElement);
+      cardsList.addItem(cardElement);
       addPopup.close();
     })
     .catch(err => {
@@ -173,7 +156,6 @@ const addPopup = new PopupWithForm('#popup-add-element', data => {
       submitButton.disabled = false;
     });
 });
-
 addPopup.setEventListeners();
 
 const userInfoPopup = new PopupWithForm('#popup-edit-profile', data => {
@@ -208,14 +190,15 @@ openPopupProfileEl.addEventListener('click', function () {
 const avaPopup = new PopupWithForm('#popup-update-avatar', data => {
   const submitButton = avaPopup._formElement.querySelector('.popup__button');
   const item = {
-    link: data['name-input-subtitle']
+    link: data['new-avatar-link']
   };
   submitButton.textContent = 'Сохранение...';
   submitButton.disabled = false;
   api
     .updateAvatar(item.link)
-    .then(() => {
-      userInfo.setAvatar(item.link);
+    .then(data => {
+      console.log(data.avatar);
+      userInfo.setAvatar(data.avatar);
       avaPopup.close();
     })
     .catch(error => {
@@ -229,7 +212,8 @@ const avaPopup = new PopupWithForm('#popup-update-avatar', data => {
 avaPopup.setEventListeners();
 
 editaVaPopupEl.addEventListener('click', function () {
-  avaPopup.setInputValues('#new-avatar-link', avaEL.src);
+  const avaFormValidator = formValidators.find(validator => validator._name === 'new-avatar-form');
+  avaFormValidator.resetValidation();
   avaPopup.open();
 });
 

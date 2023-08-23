@@ -24,9 +24,7 @@ export class Api {
       headers: {
         authorization: this.headers.authorization
       }
-    })
-      .then(this._getResponseData)
-      .catch(error => Promise.reject(`Ошибка при получении карточек: ${error}`));
+    }).then(this._getResponseData);
   }
 
   editProfile(data) {
@@ -37,9 +35,7 @@ export class Api {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(data)
-    })
-      .then(this._getResponseData)
-      .catch(error => Promise.reject(`Ошибка при редактировании профиля: ${error}`));
+    }).then(this._getResponseData);
   }
 
   addNewCard(data) {
@@ -50,9 +46,7 @@ export class Api {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(data)
-    })
-      .then(this._getResponseData)
-      .catch(error => Promise.reject(`Ошибка при добавлении новой карточки: ${error}`));
+    }).then(this._getResponseData);
   }
 
   deleteCard(cardId) {
@@ -61,9 +55,7 @@ export class Api {
       headers: {
         authorization: this.headers.authorization
       }
-    })
-      .then(this._getResponseData)
-      .catch(error => Promise.reject(`Ошибка при удалении карточки: ${error}`));
+    }).then(this._getResponseData);
   }
 
   likeCard(cardId) {
@@ -72,11 +64,7 @@ export class Api {
       headers: {
         authorization: this.headers.authorization
       }
-    })
-      .then(this._getResponseData)
-      .catch(error => {
-        Promise.reject(`Ошибка при лайке карточки: ${error}`);
-      });
+    }).then(this._getResponseData);
   }
 
   unlikeCard(cardId) {
@@ -85,11 +73,7 @@ export class Api {
       headers: {
         authorization: this.headers.authorization
       }
-    })
-      .then(this._getResponseData)
-      .catch(error => {
-        return Promise.reject(`Ошибка при снятии лайка с карточки: ${error}`); //
-      });
+    }).then(this._getResponseData);
   }
 
   updateAvatar(avatarUrl) {
@@ -100,8 +84,6 @@ export class Api {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({ avatar: avatarUrl })
-    })
-      .then(this._getResponseData)
-      .catch(error => Promise.reject(`Ошибка при обновлении аватара: ${error}`));
+    }).then(this._getResponseData);
   }
 }

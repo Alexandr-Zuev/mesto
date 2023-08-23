@@ -5,27 +5,27 @@ export class Card {
     handleCardClick,
     handleDeleteConfirm,
     userId,
-    handlelikeCard,
-    handleunlikeCard
+    handleLikeCard,
+    handleUnlikeCard
   ) {
+    this._templateSelector = templateSelector;
+    this._handleCardClick = handleCardClick;
+    this._handleLikeCard = handleLikeCard;
+    this._handleUnlikeCard = handleUnlikeCard;
+    this._handleDeleteConfirm = handleDeleteConfirm;
     this._name = data.name;
     this._link = data.link;
     this._currentUserId = data.owner._id;
-    this._templateSelector = templateSelector;
-    this._handleCardClick = handleCardClick;
-    this._handlelikeCard = handlelikeCard;
-    this._handleunlikeCard = handleunlikeCard;
-    this._handleDeleteConfirm = handleDeleteConfirm;
-    this._likesCount = data.likes.length;
+    this._likes = data.likes;
     this._userId = userId;
   }
 
   isOwnedByCurrentUser() {
-    return this._userId !== this._currentUserId;
+    return this._userId === this._currentUserId;
   }
 
-  remove() {
-    this.element.remove();
+  deleteCard() {
+    this._element.remove();
   }
 
   _getTemplate() {
@@ -40,9 +40,12 @@ export class Card {
     this._element = this._getTemplate();
     this._element.querySelector('.element__text').textContent = this._name;
     this._element.querySelector('.element__img').src = this._link;
-    this._element.querySelector('.like-button_count').textContent = this._likesCount;
+    this.likeCountElement = this._element.querySelector('.like-button_count');
+    this.likeCountElement.textContent = this._likes.length; // Обновление количества лайков
+    this.likeButton = this._element.querySelector('.like-button');
     this._setEventListeners();
-    if (this.isOwnedByCurrentUser()) {
+
+    if (!this.isOwnedByCurrentUser()) {
       const deleteButton = this._element.querySelector('.delete-button');
       deleteButton.remove();
     }
@@ -50,15 +53,13 @@ export class Card {
   }
 
   _setEventListeners() {
-    this._likeButton = this._element.querySelector('.like-button');
-    this._likeButton.addEventListener('click', () => {
-      const isLiked = !this._likeButton.classList.contains('like-button_status-active');
+    this.likeButton.addEventListener('click', () => {
+      const isLiked = !this.likeButton.classList.contains('like-button_status-active');
       if (isLiked) {
-        this._handlelikeCard(this._element);
+        this._handleLikeCard(this._element);
       } else {
-        this._handleunlikeCard(this._element);
+        this._handleUnlikeCard(this._element);
       }
-      this._updateLikesCount(isLiked);
     });
 
     this._element.querySelector('.delete-button').addEventListener('click', () => {
@@ -70,9 +71,16 @@ export class Card {
     });
   }
 
-  _updateLikesCount(isLiked) {
-    const likeCountElement = this._element.querySelector('.like-button_count');
-    this._likesCount = isLiked ? this._likesCount + 1 : this._likesCount - 1;
-    likeCountElement.textContent = this._likesCount;
+  updateLikeButton(response) {
+    this.likeCountElement.textContent = response.length;
+    this.likeButton.classList.toggle('like-button_status-active');
+  }
+
+  deactivateLikeButton() {
+    this.likeButton.disabled = true;
+  }
+
+  activateLikeButton() {
+    this.likeButton.disabled = false;
   }
 }

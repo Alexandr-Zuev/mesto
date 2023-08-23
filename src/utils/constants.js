@@ -16,7 +16,6 @@ const addPopupEl = document.querySelector('#popup-add-element');
 const formList = Array.from(document.querySelectorAll('.popup__form'));
 const popupList = Array.from(document.querySelectorAll('.popup'));
 const popupCardEl = document.querySelector('#popupCard');
-const avaEL = document.querySelector('.profile__avatar');
 const formValidators = [];
 
 export {
@@ -30,6 +29,5 @@ export {
   formList,
   popupList,
   popupCardEl,
-  formValidators,
-  avaEL
+  formValidators
 };

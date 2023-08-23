@@ -7,15 +7,16 @@ export class PopupWithConfirm extends Popup {
     this.confirmButton = this._popup.querySelector('.popup__button');
   }
 
-  open(cardElement) {
+  open(cardElement, card) {
     super.open();
     this._cardElement = cardElement;
+    this._card = card;
   }
 
   setEventListeners() {
     super.setEventListeners();
     this.confirmButton.addEventListener('click', () => {
-      this._submitCallback(this._cardElement);
+      this._submitCallback(this._cardElement, this._card);
     });
   }
 }
