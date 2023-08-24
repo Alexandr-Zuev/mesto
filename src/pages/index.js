@@ -54,16 +54,15 @@ function createCard(item) {
     handleUnlikeCard
   );
   const cardElement = card.generateCard();
-  cardElement.id = item._id;
 
   function handleDeleteConfirm() {
-    confirmPopup.open(cardElement, card);
+    confirmPopup.open(item._id, card);
   }
 
-  function handleLikeCard(cardElement) {
+  function handleLikeCard() {
     card.deactivateLikeButton();
     api
-      .likeCard(cardElement.id)
+      .likeCard(item._id)
       .then(response => {
         card.updateLikeButton(response.likes);
       })
@@ -75,10 +74,10 @@ function createCard(item) {
       });
   }
 
-  function handleUnlikeCard(cardElement) {
+  function handleUnlikeCard() {
     card.deactivateLikeButton();
     api
-      .unlikeCard(cardElement.id)
+      .unlikeCard(item._id)
       .then(response => {
         card.updateLikeButton(response.likes);
       })
@@ -103,12 +102,12 @@ formList.forEach(formElement => {
   formValidators.push(formValidator);
 });
 
-const confirmPopup = new PopupWithConfirm('#popup-confirm', (cardElement, card) => {
+const confirmPopup = new PopupWithConfirm('#popup-confirm', (itemId, card) => {
   const submitButton = confirmPopup.confirmButton;
   submitButton.textContent = 'Удаление...';
   submitButton.disabled = true;
   api
-    .deleteCard(cardElement.id)
+    .deleteCard(itemId)
     .then(() => {
       card.deleteCard();
       confirmPopup.close();
@@ -197,8 +196,7 @@ const avaPopup = new PopupWithForm('#popup-update-avatar', data => {
   api
     .updateAvatar(item.link)
     .then(data => {
-      console.log(data.avatar);
-      userInfo.setAvatar(data.avatar);
+      userInfo.setAvatar(data);
       avaPopup.close();
     })
     .catch(error => {

@@ -56,14 +56,14 @@ export class Card {
     this.likeButton.addEventListener('click', () => {
       const isLiked = !this.likeButton.classList.contains('like-button_status-active');
       if (isLiked) {
-        this._handleLikeCard(this._element);
+        this._handleLikeCard();
       } else {
-        this._handleUnlikeCard(this._element);
+        this._handleUnlikeCard();
       }
     });
 
     this._element.querySelector('.delete-button').addEventListener('click', () => {
-      this._handleDeleteConfirm(this._element);
+      this._handleDeleteConfirm();
     });
 
     this._element.querySelector('.element__img').addEventListener('click', () => {
